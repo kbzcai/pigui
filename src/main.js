@@ -20,12 +20,19 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import basicBlock from 'components/BasicBlock/main.vue'
 import basicContainer from 'components/BasicContainer/main.vue'
 import DictTag from '@/components/DictTag/index.vue'
+import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
+import 'vue-directive-image-previewer/dist/assets/style.css'
+// import DictResolver from '@/components/DictResolver/index.js'
+
+
+
 import App from './App.vue'
 window.axios = axios;
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+// DictResolver.install()
 //注册全局容器
 app.component('basicContainer', basicContainer)
 app.component('basicBlock', basicBlock)
@@ -48,3 +55,4 @@ app.use(Avue, {
 })
 app.use(AvueFormDesign)
 app.mount('#app')
+app.use(VueDirectiveImagePreviewer)

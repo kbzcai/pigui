@@ -2,8 +2,8 @@ export default {
     version: "v3.6.1", // 控制首页显示的版本号
     logo: "PIG",   // 侧边栏搜索的时候顶部展示的文案
     key: "pig", //配置主键,目前用于存储
-    title: "PIG 快速开发框架",
-    indexTitle: "PIG 快速开发框架",
+    title: "110执法视频智能巡查系统",
+    indexTitle: "110执法视频智能巡查系统",
     validateCode: true,//是否开启验证码校验
     register: true, //是否开启注册
     formLoginClient: 'pig:pig',// 用户名密码登录的 client 信息
