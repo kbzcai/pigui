@@ -120,7 +120,6 @@
                 append-to-body>
             <el-form :inline="true" :model="videoDetail" :rules="dataRule" ref="videoDetail"
                      @keyup.enter.native="dataFormSubmit()">
-
                 <!--                    <el-image v-for="url in imgUrlList"-->
                 <!--                              :key="url"-->
                 <!--                              :src="url"-->
@@ -130,14 +129,14 @@
                 <!--                            <i class="el-icon-picture-outline"></i>-->
                 <!--                        </div>-->
                 <!--                    </el-image>-->
-
-                <el-carousel indicator-position="outside" height="450px">
+                <el-carousel indicator-position="outside" height="500px">
                     <el-carousel-item v-for="url in imgUrlList" :key="url">
-                        <img :src="url"/>
-                        <!--                                <div slot="error" class="image-slot">-->
-                        <!--                                    <i class="el-icon-picture-outline"></i>-->
-                        <!--                                </div>-->
-                        <!--                            </img>-->
+                        <el-image :src="url" :preview-src-list="url.split()">
+                            <!--                                <div slot="error" class="image-slot">-->
+                            <!--                                    <i class="el-icon-picture-outline"></i>-->
+                            <!--                                </div>-->
+                            <!--                            </img>-->
+                        </el-image>
                     </el-carousel-item>
                 </el-carousel>
 
@@ -148,7 +147,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="违法行为" prop="vdType">
-                    <el-select v-model="videoDetail.vdType" :disabled="videoDetail.vdStatus*1==2">
+                    <el-select v-model="videoDetail.vdType" :disabled="videoDetail.vdStatus*1==2" :required="isHaveTo">
                         <el-option label="违法搜身" value="违法搜身"></el-option>
                         <el-option label="未依法收案" value="未依法收案"></el-option>
                         <el-option label="出警不及时" value="出警不及时"></el-option>
@@ -189,6 +188,16 @@
             }
         },
         data() {
+            let validateName = (rule, value, callback) => {
+                // 当活动名称为空值且为必填时，抛出错误，反之通过校验
+                if (this.videoDetail.vdType === '' && this.isHaveTo) {
+                    console.log("校验了")
+                    callback(new Error("请选择违法行为"));
+                } else {
+                    console.log("没校验")
+                    callback();
+                }
+            };
             return {
                 visible: false,
                 canSubmit: false,
@@ -205,8 +214,9 @@
                 },
                 dataRule: {
                     vdStatus: [
-                        {required: true, message: '状态不能为空', trigger: 'blur'}
-                    ]
+                        {required: true, message: '请选择状态', trigger: 'blur'},
+                    ],
+                    vdType: [{validator: validateName}]
                 },
                 dataList: [],
                 imgUrlList: [],
@@ -228,7 +238,20 @@
 
         },
         computed: {
-            ...mapGetters(['permissions'])
+            ...mapGetters(['permissions']),
+            isHaveTo: function () {
+                console.log(this.videoDetail.vdStatus)
+                if (this.videoDetail.vdStatus == '1') {
+                    return true;
+                    console.log("通过")
+                }
+                if (this.videoDetail.vdStatus == '2') {
+                    this.videoDetail.vdType = ''
+                    return false;
+                    console.log("未通过")
+                }
+                return this.videoDetail.vdStatus != 2;
+            }
         },
         methods: {
             dataFormSubmit() {
