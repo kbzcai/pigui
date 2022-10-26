@@ -103,7 +103,11 @@
                             header-align="center"
                             align="center"
                             label="是否违法行为">
-                        是
+                        <template #="scope">
+                            <span v-if="scope.row.fileStatus == 0">未确认</span>
+                            <span v-if="scope.row.fileStatus == 1">是</span>
+                            <span v-if="scope.row.fileStatus == 2">否</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                             prop="fileStatus"
